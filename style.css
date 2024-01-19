@@ -1,0 +1,927 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap");
+:root {
+  --svg-size: 508px;
+}
+
+main.theme-blue {
+  --background: #03003D;
+  --background-dialog: #020123D9;
+  --text-primary: #767DFF;
+  --text-secondary: #649AFF;
+  --text-light: #C8DDF5;
+  --text-dark: var(--background);
+  --text-white: #fff;
+  --gradient1: #7676FF;
+  --gradient2: #76B1FF;
+  --timer-circle-outer: #1A194F;
+  --timer-circle-inner: #090736;
+  --btn-primary: #7677FF;
+  --btn-secondary: #020123;
+  --btn-color: var(--background);
+  --border: var(--btn-primary);
+}
+
+main.theme-red {
+  --background: #29003D;
+  --background-dialog: #180123D9;
+  --text-primary: #F56297;
+  --text-secondary: #FF76A8;
+  --text-light: #E6C8F5;
+  --text-dark: var(--background);
+  --text-white: #fff;
+  --gradient1: #F56464;
+  --gradient2: #F662AE;
+  --timer-circle-outer: #3D194F;
+  --timer-circle-inner: #260736;
+  --btn-primary: #F6638F;
+  --btn-secondary: #180123;
+  --btn-color: var(--background);
+  --border: var(--btn-primary);
+}
+
+main.theme-green {
+  --background: #001B3D;
+  --background-dialog: #011023D9;
+  --text-primary: #00FAF2;
+  --text-secondary: #00FAF2;
+  --text-light: #C8F5F3;
+  --text-dark: var(--background);
+  --text-white: #fff;
+  --gradient1: #00F198;
+  --gradient2: #08F6F6;
+  --timer-circle-outer: #19314F;
+  --timer-circle-inner: #071C36;
+  --btn-primary: #00F791;
+  --btn-secondary: #011023;
+  --btn-color: var(--background);
+  --border: var(--btn-primary);
+}
+
+.resize-animation-stopper *:not(.button-container a, .button-container .highlight, main > div.hidden section > .timer) {
+  animation: none !important;
+  transition: none !important;
+}
+
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+html, body {
+  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  background-color: var(--background);
+  color: var(--text-light);
+  height: inherit;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+main::-webkit-scrollbar {
+  display: none;
+}
+
+label {
+  cursor: pointer;
+}
+
+label, button, a {
+  transition: all 0.1s;
+}
+label.disabled, button.disabled, a.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+label:active, button:active, a:active {
+  scale: 0.9;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+b {
+  color: var(--text-primary);
+}
+
+input[type=radio] {
+  cursor: pointer;
+  position: absolute;
+  left: -9999px;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 0.5em;
+}
+h1 + p {
+  text-align: justify;
+}
+
+p {
+  font-size: 1.25em;
+  line-height: 1.5em;
+  letter-spacing: 0.025em;
+  font-weight: 400;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: var(--text-default);
+}
+
+.badge {
+  color: var(--text-light);
+  padding: 0.5rem 1rem;
+  background: var(--timer-circle-outer);
+  border-radius: 2rem;
+}
+
+main {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: clip;
+  overflow-y: auto;
+  height: 100%;
+}
+main > div {
+  height: 100%;
+  padding: 0 2em;
+  min-width: calc(100% - 4em);
+  max-width: 42.5em;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+main > div.hidden section {
+  left: -100%;
+  opacity: 0;
+}
+main > div.hidden section:has(.timer) {
+  left: -50vw;
+  opacity: 1;
+}
+main > div.hidden + div {
+  left: -100vw;
+}
+main > div section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0;
+  max-width: 40em;
+  width: 100%;
+  margin: 2em 0;
+  left: 0;
+  opacity: 1;
+  transition: all 0.3s;
+}
+main > div section:nth-child(2n) {
+  justify-content: flex-start;
+}
+main > div section:last-of-type {
+  padding-bottom: 2em;
+}
+main > div section:has(.timer) {
+  margin: 0;
+}
+
+.timer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33.75em;
+  height: 33.75em;
+  border-radius: 50%;
+  background: var(--timer-circle-outer);
+  transition: left 0.3s;
+}
+.timer.start {
+  animation-name: sessionStartMini;
+  animation-duration: 1s;
+}
+.timer svg {
+  width: 31.75em;
+  height: 31.75em;
+  transform: rotate(-90deg);
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  border-radius: 50%;
+  background: var(--background);
+  box-shadow: inset 0 0.0625em 2.875em 3.75em rgba(0, 0, 0, 0.5);
+}
+.timer svg stop:first-of-type {
+  stop-color: var(--gradient1);
+}
+.timer svg stop:last-of-type {
+  stop-color: var(--gradient2);
+}
+.timer svg circle {
+  fill: none;
+  stroke-width: 1.5em;
+  stroke-dasharray: 95.6875em;
+  cx: 15.875em;
+  cy: 15.875em;
+  r: 15.125em;
+}
+.timer svg circle.colored {
+  stroke: url(#GradientColor);
+  stroke-dashoffset: 95.6875em;
+  stroke-dashoffset: 0;
+  transition: all 1s linear 0s;
+}
+.timer svg circle.colored.start {
+  animation-name: timerStart;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+.timer svg circle.bg {
+  stroke: var(--timer-circle-inner);
+}
+.timer .inner-circle {
+  z-index: 1;
+  position: relative;
+}
+.timer .inner-circle p.clock {
+  display: grid;
+  grid-template-columns: 1fr 0fr 1fr;
+  color: var(--text-primary);
+  font-size: 6.375em;
+  line-height: 1;
+  font-weight: 700;
+  padding: 2rem;
+  margin: 0;
+}
+.timer .inner-circle p.clock span {
+  display: grid;
+}
+.timer .inner-circle p.clock span:first-of-type {
+  justify-content: end;
+}
+.timer .inner-circle p.clock span:nth-child(2) {
+  letter-spacing: 0;
+  margin: 0 0.5rem;
+}
+.timer .inner-circle p.clock span:last-of-type {
+  justify-content: start;
+}
+.timer .inner-circle a {
+  display: block;
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  letter-spacing: 1.5rem;
+  text-indent: 0.75rem;
+}
+.timer .inner-circle .awe-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1rem;
+}
+.timer .inner-circle .awe-container a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: var(--timer-circle-outer);
+  border: 0.0625rem solid var(--timer-circle-outer);
+  border-radius: 1rem;
+  text-indent: 0;
+}
+.timer .inner-circle .awe-container a:hover {
+  border: 0.0625rem solid var(--text-secondary);
+}
+.timer .inner-circle .awe-container a i {
+  letter-spacing: 0;
+  text-indent: 0;
+}
+
+.controller div {
+  display: flex;
+  align-items: center;
+  opacity: 1;
+  transition: all 0.3s;
+}
+.controller div.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+.controller div .button-container {
+  position: relative;
+  background: var(--btn-secondary);
+  border: 0.0625em solid var(--border);
+  border-radius: 3.125rem;
+  font-size: 1.25em;
+  color: var(--text-light);
+  letter-spacing: 0;
+  font-weight: 600;
+  text-align: center;
+  margin-left: 4.25em;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(33.33%, 1fr));
+}
+.controller div .button-container a {
+  z-index: 1;
+  color: var(--text-light);
+  padding: 1rem 2rem;
+  margin: 0.25rem;
+  white-space: nowrap;
+  border-radius: 3.125rem;
+  transition: all 0.3s ease-in;
+}
+.controller div .button-container a:after {
+  content: attr(data-content);
+}
+.controller div .button-container a.bt-active {
+  color: var(--btn-color);
+}
+.controller div .button-container .highlight {
+  z-index: 0;
+  position: absolute;
+  top: 0.25rem;
+  height: 3.5rem;
+  background-color: var(--btn-primary);
+  border-radius: 3.125rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(33.33%, 1fr));
+  width: calc(33.33% - 0.5rem) !important;
+  left: 0;
+  right: 0;
+  margin: auto;
+  transition: all 0.3s ease-in-out, width 0.25s linear, left 0.25s linear, top 0s linear, border-radius 0s linear;
+}
+.controller div a:has(i) {
+  font-size: 1.25em;
+  padding: 2rem;
+}
+.controller h5 {
+  color: var(--text-light);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 2.5rem;
+  margin-bottom: 0;
+}
+.controller a:hover {
+  color: var(--text-white);
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.btn-group button {
+  flex: 1;
+  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0;
+  padding: 1.125rem 1.75rem;
+}
+.btn-group button.primary {
+  background: var(--btn-primary);
+  border-radius: 3.125rem;
+  font-size: 1.25rem;
+  color: var(--text-dark);
+}
+.btn-group button.secondary {
+  background: var(--btn-secondary);
+  border: 0.0625rem solid var(--border);
+  border-radius: 3.125rem;
+  font-size: 1.25rem;
+  color: var(--btn-primary);
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.settings {
+  color: var(--text-primary);
+  left: 0;
+  transition: all 0.3s;
+}
+.settings section {
+  align-items: flex-start;
+}
+.settings section:last-of-type {
+  margin-top: 0;
+}
+.settings section > div {
+  width: 100%;
+  margin-bottom: 2em;
+}
+.settings section > div .num-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  font-weight: 600;
+  column-gap: 1rem;
+}
+.settings section > div .num-container .item {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+.settings section > div .num-container .item.disabled > :not(p + span) {
+  opacity: 0.3;
+  pointer-events: none;
+}
+.settings section > div .num-container .item.disabled p {
+  position: relative;
+  top: 0;
+  transform: scale(1);
+  transition: all 0.3s;
+}
+.settings section > div .num-container .item.disabled p + span {
+  bottom: 0;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s;
+}
+.settings section > div .num-container .item.disabled:hover p {
+  top: -1rem;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s;
+}
+.settings section > div .num-container .item.disabled:hover p + span {
+  opacity: 1;
+  bottom: 0.25rem;
+  transform: scale(1);
+  transition: all 0.3s;
+}
+.settings section > div .num-container .item div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: double 0.25em transparent;
+  border-radius: 3.125em;
+  background-image: linear-gradient(var(--background), var(--background)), linear-gradient(to right, var(--gradient1), var(--gradient2));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: inset 0 0.0625rem 2.875rem 3.75rem rgba(0, 0, 0, 0.5);
+}
+.settings section > div .num-container .item div a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 2em;
+  border-radius: 50%;
+  background: var(--background);
+  box-shadow: 0 0.125rem 3.4375rem 0.1875rem var(--background), inset 0 0 0.0625rem 2.875rem 3.75rem rgba(0, 0, 0, 0.5);
+  margin: 0.3125rem;
+  border: double 0.25rem transparent;
+  border-radius: 1.875rem;
+  background-image: linear-gradient(var(--background), var(--background)), linear-gradient(to right, var(--gradient1), var(--gradient2));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+.settings section > div .num-container .item div a:first-of-type:after {
+  content: "-";
+  position: absolute;
+  top: -0.125rem;
+}
+.settings section > div .num-container .item div a:last-of-type:after {
+  content: "+";
+  position: absolute;
+}
+.settings section > div .num-container .item div span {
+  font-size: 2rem;
+  line-height: 1em;
+  color: var(--text-primary);
+}
+.settings section > div .num-container .item p {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 1.25em;
+  margin-bottom: 0;
+}
+.settings section > div .num-container .item p + span {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  bottom: 0rem;
+  right: 0;
+  width: 100%;
+}
+.settings section > div .theme-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 2em;
+}
+.settings section > div .theme-container > label {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  width: 4em;
+  height: 4em;
+  border-radius: 2em;
+  transition: all 0.1s;
+}
+.settings section > div .theme-container > label:active {
+  scale: 0.9;
+  box-shadow: inset 0 0 0 0.625rem #0000004f;
+}
+.settings section > div .theme-container > label:before {
+  content: "";
+  position: absolute;
+  margin: 0.5625rem;
+  border-radius: 1.4375rem;
+  width: 2.875rem;
+  height: 2.875rem;
+  box-shadow: inset 0 0.0625rem 3.5625rem 4.625rem rgba(0, 0, 0, 0.5);
+}
+.settings section > div .theme-container > label input:checked + span:after {
+  content: "";
+  font-family: "Font Awesome 6 Free";
+  position: absolute;
+  display: flex;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  opacity: 0;
+  animation-name: appear;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+.settings section > div .theme-container > label:last-of-type {
+  margin-right: 0;
+}
+.settings section > div .theme-container > label.theme-blue {
+  background-image: conic-gradient(from 0deg at 50% 50%, #76B1FF 0%, #7676FF 100%);
+}
+.settings section > div .theme-container > label.theme-blue:before {
+  background: #03003D;
+}
+.settings section > div .theme-container > label.theme-blue span:after {
+  color: #769EFF;
+}
+.settings section > div .theme-container > label.theme-green {
+  background-image: conic-gradient(from 0deg at 50% 50%, #08F6F6 0%, #00F198 100%);
+}
+.settings section > div .theme-container > label.theme-green:before {
+  background: #001B3D;
+}
+.settings section > div .theme-container > label.theme-green span:after {
+  color: #00F9DE;
+}
+.settings section > div .theme-container > label.theme-red {
+  background-image: conic-gradient(from 0deg at 50% 50%, #F662AE 0%, #F56464 100%);
+}
+.settings section > div .theme-container > label.theme-red:before {
+  background: #29003D;
+}
+.settings section > div .theme-container > label.theme-red span:after {
+  color: #F6638F;
+}
+.settings section > div .theme-container > label.theme-auto {
+  background-image: conic-gradient(from 0deg at 50% 50%, #B63D55 12%, #7A70FF 30%, #67B0FF 53%, #00F9F7 64%, #00F78F 79%, #B6398E 100%);
+}
+.settings section > div .theme-container > label.theme-auto:before {
+  background: #03003D;
+}
+.settings section > div .theme-container > label.theme-auto span:after {
+  color: #F6638F;
+}
+.settings section > div .theme-container > label.theme-auto input + span:before {
+  content: "auto";
+  z-index: 1;
+  position: absolute;
+  font-weight: 600;
+  left: 0;
+  right: 0;
+  bottom: 1.35em;
+  color: var(--text-primary);
+  text-align: center;
+  transition: all 0.3s;
+}
+.settings section > div .theme-container > label.theme-auto input:checked + span:before {
+  bottom: -1.5em;
+}
+.settings section > div .theme-container > label span {
+  z-index: 1;
+  font-weight: 600;
+  align-self: center;
+}
+.settings p {
+  font-size: 1em;
+  color: var(--text-primary);
+}
+.settings h1 {
+  color: var(--text-primary);
+}
+.settings h4 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 0;
+  letter-spacing: 0.8887em;
+  color: var(--text-secondary);
+}
+
+.session-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+.session-container .badge {
+  z-index: 1;
+  opacity: 0;
+  position: absolute;
+  top: -4.4375rem;
+  transition: all 0.3s;
+  color: var(--text-secondary);
+}
+.session-container .session {
+  opacity: 0;
+  height: 2em;
+  width: 2em;
+  margin: 0 1rem;
+  border-radius: 1em;
+  background-color: var(--gradient2);
+  transition: all 0.5s;
+  animation-name: sessionStart;
+  animation-duration: 1s;
+  animation-delay: 0.5s;
+  transition: all 0.3s;
+}
+.session-container .session.s {
+  background-color: var(--timer-circle-outer);
+}
+.session-container .session.s0 {
+  background-image: linear-gradient(90deg, transparent 50%, var(--timer-circle-outer) 50%), linear-gradient(60deg, var(--timer-circle-outer) 50%, transparent 50%);
+}
+.session-container .session.s1 {
+  background-image: linear-gradient(90deg, transparent 50%, var(--timer-circle-outer) 50%), linear-gradient(0deg, var(--timer-circle-outer) 50%, transparent 50%);
+}
+.session-container .session.s2 {
+  background-image: linear-gradient(90deg, transparent 50%, var(--timer-circle-outer) 50%), linear-gradient(270deg, var(--timer-circle-outer) 50%, transparent 50%);
+}
+.session-container .session.s3 {
+  background-image: linear-gradient(181deg, transparent 50%, var(--gradient2) 50%), linear-gradient(270deg, var(--timer-circle-outer) 50%, transparent 50%);
+}
+.session-container .session.s4 + [class^=s] {
+  animation-delay: 0.75s;
+}
+.session-container .session.s4 + [class^=s] + [class^=s] {
+  animation-delay: 1s;
+}
+.session-container .session.s4 + [class^=s] + [class^=s] + [class^=s] {
+  animation-delay: 1.25s;
+}
+.session-container .show {
+  opacity: 1;
+}
+
+@keyframes sessionStart {
+  0% {
+    scale: 1;
+  }
+  25% {
+    scale: 1.2;
+    box-shadow: 0 0 0.625rem var(--gradient2);
+  }
+  100% {
+    scale: 1;
+  }
+}
+@keyframes sessionStartMini {
+  0% {
+    scale: 1;
+  }
+  25% {
+    scale: 1.01;
+    box-shadow: 0 0 0.625rem var(--gradient2);
+  }
+  100% {
+    scale: 1;
+  }
+}
+@keyframes sessionDone {
+  0% {
+    scale: 1;
+    background-color: var(--gradient2);
+  }
+  25% {
+    scale: 1.2;
+    background-color: var(--gradient2);
+    box-shadow: 0 0 0.625rem var(--gradient2);
+  }
+  50% {
+    box-shadow: 0 0 0.625rem var(--gradient2);
+    background-color: var(--gradient2);
+  }
+  100% {
+    scale: 1;
+    background-color: var(--timer-circle-outer);
+  }
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes anim {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes timerStart {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 95.625em;
+  }
+}
+@keyframes timerComplete {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (max-width: 1200px) {
+  main > div.hidden section:has(.timer) {
+    left: -60vw;
+  }
+}
+@media (max-width: 992px) {
+  main > div.hidden section:has(.timer) {
+    left: -70vw;
+  }
+}
+@media (max-width: 850px) {
+  main > div.hidden section:has(.timer) {
+    left: -100vw;
+    opacity: 0;
+  }
+}
+@media (max-width: 768px) {
+  .controller div .button-container a {
+    padding: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  html, body {
+    font-size: 14px;
+  }
+
+  .settings section > div .num-container {
+    flex-wrap: wrap;
+  }
+  .settings section > div .num-container .item {
+    min-width: 11.5rem;
+  }
+
+  main > div.hidden + div {
+    height: 100vh;
+    overflow: scroll;
+  }
+}
+@media (max-width: 520px) {
+  html, body {
+    font-size: 13px;
+  }
+
+  main > div section:has(.timer) {
+    font-size: 12px;
+  }
+
+  .controller div .button-container a[data-content=pomodoro]:after {
+    content: "focus";
+  }
+
+  .controller div .button-container a[data-content="short break"]:after {
+    content: "short b.";
+  }
+
+  .controller div .button-container a[data-content="long break"]:after {
+    content: "long b.";
+  }
+}
+@media (max-width: 386px) {
+  html, body {
+    font-size: 11px;
+  }
+
+  main > div section:has(.timer) {
+    font-size: 10px;
+  }
+
+  .settings section:last-of-type {
+    margin-top: 0;
+  }
+  .settings section > div .num-container .item {
+    max-width: 100vw;
+  }
+}
+dialog {
+  z-index: 1;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  background: transparent;
+  transition: background-color 0.3s, left 0s step-end 0.3s;
+  width: 100%;
+  height: 100%;
+  left: -99999px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+}
+dialog .content {
+  position: relative;
+  top: 3rem;
+  opacity: 0;
+  max-width: 29.625rem;
+  background: var(--background);
+  color: var(--text-primary);
+  box-shadow: inset 0 -3.75rem 2.875rem 3.75rem rgba(0, 0, 0, 0.5);
+  border: 0.0625rem solid var(--btn-primary);
+  border-radius: 1rem;
+  margin: 2rem;
+  transition: all 0.3s;
+}
+dialog .content h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  letter-spacing: 0;
+  text-align: center;
+}
+dialog .content p {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.375rem;
+  text-align: center;
+  width: 80%;
+  color: var(--text-secondary);
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3rem;
+}
+dialog[open], dialog.open {
+  background-color: var(--background-dialog);
+  transition: left 0s step-end, background-color 0.3s;
+  left: 0;
+}
+dialog[open] .content, dialog.open .content {
+  opacity: 1;
+  top: 0;
+  padding: 2rem;
+  transition: all 0.3s;
+}
